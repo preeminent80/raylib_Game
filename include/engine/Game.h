@@ -1,18 +1,15 @@
 #pragma once
 #include "../raylib.h"
-
-
 class Game 
 {
-private:
-
 public:
-
     Game(int windowHeight, int windowWidth, const char* windowName, int targetFps);
+    Game(const Game& other) = delete;
+    Game& operator=(const Game& other) = delete;
     ~Game() noexcept;
-
     bool GameShouldClose();
     void Tick();
+private:
     void Update();
     void Render();
 };
