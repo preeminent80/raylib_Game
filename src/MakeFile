@@ -1,3 +1,8 @@
+<<<<<<< HEAD
 all:
 	g++ main.cpp Game.cpp -o main.exe -O1 -Wall -std=c++11 -Wno-missing-braces -I../include -L../lib -lraylib -lopengl32 -lgdi32 -lwinmm
 
+=======
+all:
+	gcc main.cpp -o main.exe -O1 -Wall -Wno-missing-braces -Iinclude/ -Llib/ -lraylib -lopengl32 -lgdi32 -lwinmm
+>>>>>>> 5ceab17bc04045dc243fb4e03d0f070e46da8f71
