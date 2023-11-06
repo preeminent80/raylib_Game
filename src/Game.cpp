@@ -1,44 +1,36 @@
 #include "../include/engine/Game.h"
 
-Game::Game()
+Game::Game(int windowHeight, int windowWidth, const char* windowName, int targetFps)
 {
-
+    InitWindow(windowWidth, windowHeight, windowName);
+    SetTargetFPS(targetFps);
 }
 
 Game::~Game()
 {
-
-}
-
-void Game::init(int windowHeight, int windowWidth, const char* windowName, int targetFps)
-{
-    InitWindow(windowWidth, windowHeight, windowName);
-
-    SetTargetFPS(targetFps);
-
-}
-
-void Game::Close()
-{
     CloseWindow();
 }
 
-
-bool Game::notRunning()
+bool Game::GameShouldClose()
 {
     return WindowShouldClose();
 }
 
-void Game::update()
+void Game::Tick()
+{
+    BeginDrawing();
+        Update();
+        Render();
+    EndDrawing();
+}
+
+void Game::Update()
 {
 
 }
 
-void Game::render()
+void Game::Render()
 {
-    BeginDrawing();
-
-
-
-    EndDrawing();
+    ClearBackground(RAYWHITE);
+    DrawText(TextFormat("FPS: %i", GetFPS()), 10, 10, 10, BLACK);
 }

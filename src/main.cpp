@@ -1,19 +1,17 @@
 #include "../include/engine/Game.h"
-Game* game;
 
 int main(void)
 {
-    game = new Game();
 
-    game->init(400,800,"Window",60);
+    int screenWidth = 800;
+    int screenHeight = 450;
 
-    while(!game->notRunning())
+    Game game{screenHeight,screenWidth,"Window",60};
+
+    while(!game.GameShouldClose())
     {
-        game->update();
-        game->render();
+        game.Tick();
     }
-
-    game->Close();
-
+     
     return 0;
 }
