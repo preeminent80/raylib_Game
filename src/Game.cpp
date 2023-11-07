@@ -1,9 +1,11 @@
 #include "../include/engine/Game.h"
 #include "../include/engine/Entity.h"
+#include "../include/engine/Player.h"
 #include <assert.h>
 #include <iostream>
+#include <unordered_map> 
 
-Entity* testEntity; //Test Entity
+Player* newPLayer;
 
 Game::Game(int windowHeight, int windowWidth, const char* windowName, int targetFps)
 {
@@ -11,12 +13,15 @@ Game::Game(int windowHeight, int windowWidth, const char* windowName, int target
     InitWindow(windowWidth, windowHeight, windowName);
     SetTargetFPS(targetFps);
 
-    //Testing Entity Class
-    testEntity = new Entity("../res/TestSpriteSheet.png", 400,225,3,3,288, 288, 2);
-    testEntity->SelectSpriteFromSheet(0,1);
+    WaitTime(2);
+    //Testing Player Class
+    newPLayer = new Player();
+    newPLayer->init("../res/TestAnimation.png", {300,225},{1,4},{64, 128}, 3);
+    newPLayer->AddAnimation("Walk_W", {0,1});
+    newPLayer->RunAnim("Walk_W", true, 4);
     
 }
-Game::~Game()
+Game::~Game()   
 {
     assert(GetWindowHandle()); //If Assertion Window Already Closed
     CloseWindow();
@@ -34,12 +39,13 @@ void Game::Tick()
 }
 void Game::Update()
 {
-    testEntity->update();
-    
+    newPLayer->update();
+
 }
 void Game::Render()
 {
     ClearBackground(RAYWHITE);
     DrawText(TextFormat("FPS: %i", GetFPS()), 10, 10, 10, BLACK);
-    testEntity->render();
+    newPLayer->render();
+
 }
