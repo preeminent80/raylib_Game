@@ -4,7 +4,6 @@
 #include <assert.h>
 #include <iostream>
 #include <unordered_map> 
-
 Player* newPLayer;
 
 Game::Game(int windowHeight, int windowWidth, const char* windowName, int targetFps)
@@ -16,9 +15,10 @@ Game::Game(int windowHeight, int windowWidth, const char* windowName, int target
     WaitTime(2);
     //Testing Player Class
     newPLayer = new Player();
-    newPLayer->init("../res/TestAnimation.png", {300,225},{1,4},{64, 128}, 3);
-    newPLayer->AddAnimation("Walk_W", {0,1});
+    newPLayer->init("../res/TestAnimation.png", {300,225},{64,128}, 3); 
+    newPLayer->AddAnimation("../res/TestAnimation.png","Walk_W", {0,0}, {1,4}, {64, 128});
     newPLayer->RunAnim("Walk_W", true, 4);
+    
     
 }
 Game::~Game()   
