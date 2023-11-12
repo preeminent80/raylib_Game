@@ -1,12 +1,15 @@
 #include "../include/engine/Game.h"
 
-int main(void)
+
+int main(int argc, char* argv[])
 {
 
-    int screenWidth = 800;
-    int screenHeight = 450;
+    int screenWidth = 1600/1.5;
+    int screenHeight = 900/1.5; 
+    
+    
 
-    Game game{screenHeight,screenWidth,"Window",60};
+    Game game{screenHeight,screenWidth,"Window",60, argc, argv};
 
     while(!game.GameShouldClose())
     {

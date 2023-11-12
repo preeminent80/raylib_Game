@@ -3,7 +3,7 @@
 class Game 
 {
 public:
-    Game(int windowHeight, int windowWidth, const char* windowName, int targetFps);
+    Game(int windowHeight, int windowWidth, const char* windowName, int targetFps, int argc, char* argv[]);
     Game(const Game& other) = delete;
     Game& operator=(const Game& other) = delete;
     ~Game() noexcept;

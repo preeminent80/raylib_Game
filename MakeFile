@@ -1,0 +1,16 @@
+CC = g++
+INCDIR = -Iinclude
+LIBDIR = -Llib
+CFLAGS += -o main.exe -O1 -Wall -std=c++11 -Wno-missing-braces
+
+LDFLAGS += -lraylib -lopengl32 -lgdi32 -lwinmm
+
+.PHONY: all clean
+
+all:
+	$(CC) src/Entity.cpp src/Game.cpp src/main.cpp src/map.cpp -o  main.exe $(CFLAGS) $(INCDIR) $(LIBDIR) $(LDFLAGS)
+
+clean:
+	rm *.o
+	rm *.a
+	rm *.exe

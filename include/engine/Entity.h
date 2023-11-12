@@ -18,7 +18,7 @@ class Entity
 {
 public:
 
-    //Textures and Source And Dest Rects And SpriteSheet and Frame Data
+    //Textures and Source And Dest Rects And SpriteSheet and Frame Data.
     Texture2D texture;
     Rectangle source;
     Rectangle dest;
@@ -28,7 +28,7 @@ public:
     std::string currentAnimation;
 
 
-    unsigned int scale = 1;
+    float scale = 1;
     unsigned int rotation = 0;
     Vector2 position;
     Vector2 origin = {0,0};
@@ -36,13 +36,13 @@ public:
     Entity(); 
     ~Entity();
 
-    void init(const char* texturePath, Vector2 pos, Vector2 size, int scale); 
-    void AddAnimation(const char* texturePath,  std::string name, Vector2 SectionOfSpriteSheet, Vector2 rows_col, Vector2 size);
-    void RunAnim(std::string name, bool looped, int frames);
+    virtual void init(const char* texturePath, Vector2 pos, Vector2 size, float Scale); 
+    animation AddAnim(const char* texturePath,  std::string name, Vector2 SectionOfSpriteSheet, Vector2 rows_col, Vector2 size, int frames);
+    void RunAnim(std::string name, bool looped);
     void StopAnim();
     void PlayAnim();
 
     virtual void update();
-    void render();
+    virtual void render();
 };
 

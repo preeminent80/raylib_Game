@@ -16,13 +16,14 @@ Entity::~Entity()
 }
 
 
-void Entity::init(const char* texturePath, Vector2 pos, Vector2 size, int Scale)
+void Entity::init(const char* texturePath, Vector2 pos, Vector2 size, float Scale)
 {
     texture = LoadTexture(texturePath);
     position.x = (int) pos.x;
     position.y = (int) pos.y;
     dest.height = size.y * Scale;
     dest.width = size.x * Scale;
+    
 
     scale = Scale;
 
@@ -43,9 +44,6 @@ void Entity::update()
     dest.x = position.x;
     dest.y = position.y;
 
-    PlayAnim();
-
- 
 }
 
 void Entity::render()
@@ -53,12 +51,17 @@ void Entity::render()
     DrawTexturePro(texture,source,dest,origin,rotation,WHITE);
 }
 
-void Entity::AddAnimation(const char* texturePath, std::string  name, Vector2 SectionOfSpriteSheet, Vector2 rows_col, Vector2 size )
+animation Entity::AddAnim(const char* texturePath, std::string  name, Vector2 SectionOfSpriteSheet, Vector2 rows_col, Vector2 size, int frames)
 {   
-
-
     struct animation newAnim;
-    newAnim.texture = LoadTexture(texturePath);
+
+    if(texturePath == "base")
+    {
+        newAnim.texture = texture;
+    }
+    else{
+            newAnim.texture = LoadTexture(texturePath);
+    }
     
 
     newAnim.source.x = rows_col.x;
@@ -81,27 +84,31 @@ void Entity::AddAnimation(const char* texturePath, std::string  name, Vector2 Se
     newAnim.timer = 0.0f;
     newAnim.Looped = false;
     newAnim.isPlayingAnim = false;
-    newAnim.Frames = 0;
+    newAnim.Frames = frames;
 
     animations.insert({name, newAnim});
+
+    const Rectangle temp = animations[name].source;
+
+
+    animations[name].source.x = animations[name].Frames;
+    animations[name].source.y =  SectionOfSpriteSheet.y; // single frames not 2d spritesheet thus why y stays 0
+    animations[name].source.height = temp.height; // gets the animated sprite height
+    animations[name].source.width = temp.width /animations[name].source.x; // gets the animated sprite width 
+
+    
+
+    return newAnim;
 }
 
-void Entity::RunAnim(std::string name, bool looped, int frames)
+void Entity::RunAnim(std::string name, bool looped)
 {   
     if(animations.find(name) != animations.end())
     {
         animations[name].Looped = looped;
-        animations[name].Frames = frames;
-        const Rectangle temp = animations[name].source;
 
-
-        animations[name].source.x = frames;
-        animations[name].source.y =  animations[name].source.y/ animations[name].source.height; // single frames not 2d spritesheet thus why y stays 0
-        animations[name].source.height = temp.height; // gets the animated sprite height
-        animations[name].source.width = temp.width /animations[name].source.x; // gets the animated sprite width 
-
-        currentAnimation = name;
         animations[name].isPlayingAnim = true;
+        currentAnimation = name;
     } else 
     {
         std::cout << "\nAnimation-> " << name << " <-Does Not Exist" << std::endl;
@@ -123,7 +130,6 @@ void Entity::PlayAnim()
                 {
             
                     animations[currentAnimation].timer = 0.0f;
-                    std::cout << animations[currentAnimation].current_frame;
                     animations[currentAnimation].current_frame += 1;
                     animations[currentAnimation].current_frame = animations[currentAnimation].current_frame % animations[currentAnimation].Frames;
                     if(animations[currentAnimation].current_frame == 0)
@@ -137,7 +143,6 @@ void Entity::PlayAnim()
                 }
                 else{
                     animations[currentAnimation].timer = 0.0f;
-                    std::cout << animations[currentAnimation].current_frame;
                     animations[currentAnimation].current_frame += 1;
                 }
             }
@@ -160,9 +165,6 @@ void Entity::PlayAnim()
             origin.x = dest.height/2; // fixes orgin
             origin.y = dest.width/2; // same here
 
-            
-
-            // SelectSpriteFromSheet((int) animations[name].x, (int) animations[name].y);  changes the animation back to the selected section > MIGHT WANNA FIX LATER
         }
     }
 }

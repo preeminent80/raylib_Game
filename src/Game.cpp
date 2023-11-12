@@ -1,25 +1,33 @@
 #include "../include/engine/Game.h"
 #include "../include/engine/Entity.h"
 #include "../include/engine/Player.h"
+#include "../include/engine/map.h"
 #include <assert.h>
 #include <iostream>
 #include <unordered_map> 
+
+//Player Dec
 Player* newPLayer;
 
-Game::Game(int windowHeight, int windowWidth, const char* windowName, int targetFps)
+//Map dec
+Map* map;
+
+
+Game::Game(int windowHeight, int windowWidth, const char* windowName, int targetFps, int argc, char* argv[])
 {
     assert(!GetWindowHandle()); //If Assertion Window Already Open
     InitWindow(windowWidth, windowHeight, windowName);
     SetTargetFPS(targetFps);
 
-    WaitTime(2);
     //Testing Player Class
     newPLayer = new Player();
-    newPLayer->init("../res/TestAnimation.png", {300,225},{64,128}, 3); 
-    newPLayer->AddAnimation("../res/TestAnimation.png","Walk_W", {0,0}, {1,4}, {64, 128});
-    newPLayer->RunAnim("Walk_W", true, 4);
-    
-    
+    newPLayer->init("res/PlayerSprites/Walk.png", {300,225},{64,128}, 3.0f); 
+
+    //Map Init Under Dev
+    map = new Map();
+    map->AddLayer("res/Map/Ground.csv");
+    map->TileSet("res/Map/Overworld.png", {640, 576}, {640/16,576/16}); 
+    std::cout << map->reLayers[0].size();
 }
 Game::~Game()   
 {
@@ -39,12 +47,14 @@ void Game::Tick()
 }
 void Game::Update()
 {
+    //Player
+    
     newPLayer->update();
-
 }
 void Game::Render()
 {
     ClearBackground(RAYWHITE);
+    
     DrawText(TextFormat("FPS: %i", GetFPS()), 10, 10, 10, BLACK);
     newPLayer->render();
 
