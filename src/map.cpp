@@ -6,51 +6,62 @@ Map::~Map() {};
 
 void Map::TileSet(const char* Texturefile, Vector2 size, Vector2 rows_col)
 {
+    int inc = 0;
 
     for(int y=0;y<rows_col.y;y++)
     {
         for(int x=0;x<rows_col.x;x++)
         {
-            Entity* tile;
-            tile = new Entity();
-            tile->init(Texturefile,{0,0}, {size.x, size.y}, 0.1f);
+            struct tile newTile;
 
-            //Init tiles and slices each once
-            tile->source.x = x*(size.x/rows_col.x);
-            tile->source.y = y*(size.y/rows_col.y);
-            tile->source.width = (size.x/rows_col.x);
-            tile->source.height = (size.y/rows_col.y);
+            newTile.source.x = x*(size.x/rows_col.x);
+            newTile.source.y = y*(size.y/rows_col.y);
+            newTile.source.width = (size.x/rows_col.x);
+            newTile.source.height = (size.y/rows_col.y);
 
-            //Creating Hash and Adding tile to map
-            tileset.insert({(y*40)+x, *tile});
+            //Creating Hash and Adding tile to tiles
+            tiles.insert({inc, newTile});
+            inc++;
         }
     }
 
-    int index = 0;
-    Entity* Temptile;
-    for(int layer=0;layer<layers.size();layer++)
+   
+    
+    for(int layer=0;layer<(int)layers.size();layer++)
     {
-        std::vector<Entity*> re;
-        for(int row=0;row<layers[layer].size();row++)
+        for(int y=0;y<(int)layers[layer].size();y++)
         {
-            for(int e=0;e<layers[layer][row].size();e++)
+            std::vector<Entity*> line;
+            for(int x=0;x<(int)layers[layer][y].size();x++)
             {
-                index = std::stoi(layers[layer][row][e]);
+                int index = 0;
+                index = std::stoi(layers[layer][y][x]);
                 if(index != -1)
                 {
-                    Temptile = &tileset[index];
-                    
-                    Temptile->position.x = e*(size.x/rows_col.x);
-                    Temptile->position.y = row*(size.y/rows_col.y);
+                    Entity* tile;
+                    tile = new Entity();
+                    tile->init(Texturefile,{0,0}, size, 3);
 
+                    tile->origin.x = 0;
+                    tile->origin.y = 0;
 
+                    tile->source.x = tiles[index].source.x;
+                    tile->source.y = tiles[index].source.y;
+                    tile->source.width = (tiles[index].source.width);
+                    tile->source.height = (tiles[index].source.height);
 
-                    re.push_back(Temptile); 
-                } 
+                    tile->dest.width = (tiles[index].source.width) * 3;
+                    tile->dest.height = (tiles[index].source.height) * 3;
+
+                    tile->position.x = (x*(size.x/rows_col.x)*3);
+                    tile->position.y = (y*(size.y/rows_col.y)*3);
+
+                    line.push_back(tile);
+            
+                }
             }
-            std::cout<< std::endl;
+            map.push_back(line);
         }
-        reLayers.push_back(re);
     }
 }
 
@@ -58,7 +69,6 @@ void Map::AddLayer(const char* file)
 {
 
     std::vector<std::vector<std::string>> layer;
-    layers.push_back(layer);
 
     std::ifstream fin;
     fin.open(file);
@@ -70,43 +80,48 @@ void Map::AddLayer(const char* file)
 
     
     std::string line;
-    std::vector<std::string> Aline;
-    while(!fin.eof())
+    while(std::getline(fin, line))
     {
-        std::getline(fin, line);
+
+
+        std::vector<std::string> Aline;
         std::istringstream ss(line);
 
-        while (std::getline(ss, line, ',')) {
-            Aline.push_back(line);
-        }
-        layer.push_back(Aline);
-    }
-
-    for(std::vector<std::string> row : layer)
-    {
-        for(std::string e : row)
+        while(ss)
         {
-            std::cout << e << " ";
+            std::string value;
+            if(!std::getline(ss, value, ','))
+            {
+                break;
+            }
+
+            Aline.push_back(value);
         }
+
+        layer.push_back(Aline);
         std::cout << std::endl;
     }
+
+    
+    layers.push_back(layer);
 }   
 
 
 void Map::Render()
 {
-    for(std::vector<Entity*> L : reLayers)
+    for(std::vector<Entity*> L : map)
     {
         for(Entity* e : L)
         {
             e->render();
         }
     }
+
 }
 
 void Map::Update()
 {
-    for(std::vector<Entity*> L : reLayers)
+     for(std::vector<Entity*> L : map)
     {
         for(Entity* e : L)
         {

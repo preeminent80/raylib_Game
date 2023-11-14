@@ -2,9 +2,11 @@
 #include "Game.h"
 #include "Entity.h"
 
+
 class Player : public Entity
 {
 public:
+    Camera2D camera;
     Vector2 velocity = {0,0};
     int speed = 3;
     std::string dir = "down";
@@ -26,6 +28,11 @@ public:
         AddAnim("res/PlayerSprites/Walk.png", "Walk_AI", {0,3}, {4,4}, {64, 128}, 1);
         AddAnim("res/PlayerSprites/Walk.png", "Walk_SI", {0,0}, {4,4}, {64, 128}, 1); 
         AddAnim("res/PlayerSprites/Walk.png", "Walk_DI", {0,1}, {4,4}, {64, 128}, 1); 
+
+        camera.offset = {GetScreenWidth()/2.0f, GetScreenHeight()/2.0f};
+        camera.target = position;
+        camera.rotation = 0.0f;
+        camera.zoom = 1.0f;
     }
 
     void update() override
@@ -34,6 +41,8 @@ public:
         Entity::update();
         position.x += velocity.x * speed;
         position.y += velocity.y * speed;
+        
+        
 
         //Inputs
         //W input
@@ -100,4 +109,12 @@ public:
       
     } 
     
+    void render() override
+    {
+        Entity::render();
+        
+        //Camera
+        camera.target = position;
+    }
+
 };

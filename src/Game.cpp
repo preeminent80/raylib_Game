@@ -6,6 +6,9 @@
 #include <iostream>
 #include <unordered_map> 
 
+#define FPS_POS GetScreenToWorld2D({10,10}, newPLayer->camera)
+
+
 //Player Dec
 Player* newPLayer;
 
@@ -26,8 +29,9 @@ Game::Game(int windowHeight, int windowWidth, const char* windowName, int target
     //Map Init Under Dev
     map = new Map();
     map->AddLayer("res/Map/Ground.csv");
+    map->AddLayer("res/Map/Enviroment.csv");
     map->TileSet("res/Map/Overworld.png", {640, 576}, {640/16,576/16}); 
-    std::cout << map->reLayers[0].size();
+
 }
 Game::~Game()   
 {
@@ -41,21 +45,27 @@ bool Game::GameShouldClose()
 void Game::Tick()
 {
     BeginDrawing();
+    BeginMode2D(newPLayer->camera);
         Update();
         Render();
+    EndMode2D();
     EndDrawing();
 }
 void Game::Update()
 {
+    //Map
+    map->Update();
+
     //Player
-    
     newPLayer->update();
 }
 void Game::Render()
 {
     ClearBackground(RAYWHITE);
-    
-    DrawText(TextFormat("FPS: %i", GetFPS()), 10, 10, 10, BLACK);
+    map->Render();
+    DrawText(TextFormat("FPS: %i", GetFPS()), FPS_POS.x,FPS_POS.y, 10, BLACK);
     newPLayer->render();
 
 }
+
+

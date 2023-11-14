@@ -55,7 +55,7 @@ animation Entity::AddAnim(const char* texturePath, std::string  name, Vector2 Se
 {   
     struct animation newAnim;
 
-    if(texturePath == "base")
+    if(texturePath == (const char*)"base")
     {
         newAnim.texture = texture;
     }
