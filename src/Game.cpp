@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <iostream>
 #include <unordered_map> 
+#include <vector>
 
 #define FPS_POS GetScreenToWorld2D({10,10}, newPLayer->camera)
 
@@ -24,7 +25,7 @@ Game::Game(int windowHeight, int windowWidth, const char* windowName, int target
 
     //Testing Player Class
     newPLayer = new Player();
-    newPLayer->init("res/PlayerSprites/Walk.png", {300,225},{64,128}, 3.0f); 
+    newPLayer->init("res/PlayerSprites/Walk.png", {240*3,240*3},{64,128}, 3.0f); 
 
     //Map Init Under Dev
     map = new Map();
@@ -32,6 +33,8 @@ Game::Game(int windowHeight, int windowWidth, const char* windowName, int target
     map->AddLayer("res/Map/Enviroment.csv");
     map->TileSet("res/Map/Overworld.png", {640, 576}, {640/16,576/16}); 
 
+
+    
 }
 Game::~Game()   
 {

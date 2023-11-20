@@ -25,6 +25,6 @@ public:
     void Update();
     std::unordered_map<int, struct tile> tiles;
     std::vector<std::vector<std::vector<std::string>>> layers;
-    std::vector<std::vector<Entity*>> map;
+    std::vector<std::vector<std::vector<Entity*>>> map;
 private:
 };

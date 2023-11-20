@@ -29,6 +29,7 @@ void Map::TileSet(const char* Texturefile, Vector2 size, Vector2 rows_col)
     
     for(int layer=0;layer<(int)layers.size();layer++)
     {
+        std::vector<std::vector<Entity*>> Layer;
         for(int y=0;y<(int)layers[layer].size();y++)
         {
             std::vector<Entity*> line;
@@ -60,8 +61,9 @@ void Map::TileSet(const char* Texturefile, Vector2 size, Vector2 rows_col)
             
                 }
             }
-            map.push_back(line);
+            Layer.push_back(line);
         }
+        map.push_back(Layer);
     }
 }
 
@@ -109,11 +111,14 @@ void Map::AddLayer(const char* file)
 
 void Map::Render()
 {
-    for(std::vector<Entity*> L : map)
+    for(std::vector<std::vector<Entity*>> L : map)
     {
-        for(Entity* e : L)
+        for(std::vector<Entity*> r : L)
         {
-            e->render();
+            for(Entity* e : r)
+            {
+                e->render();
+            }
         }
     }
 
@@ -121,11 +126,14 @@ void Map::Render()
 
 void Map::Update()
 {
-     for(std::vector<Entity*> L : map)
+     for(std::vector<std::vector<Entity*>> L : map)
     {
-        for(Entity* e : L)
+        for(std::vector<Entity*> r : L)
         {
-            e->update();
+            for(Entity* e : r)
+            {
+                e->update();
+            }
         }
     }
 }

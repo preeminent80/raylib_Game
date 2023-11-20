@@ -4,7 +4,6 @@
 int reverse = 0;
 
 
-
 Entity::Entity()
 {
 
@@ -62,7 +61,6 @@ animation Entity::AddAnim(const char* texturePath, std::string  name, Vector2 Se
     else{
             newAnim.texture = LoadTexture(texturePath);
     }
-    
 
     newAnim.source.x = rows_col.x;
     newAnim.source.y = rows_col.y;
@@ -109,6 +107,7 @@ void Entity::RunAnim(std::string name, bool looped)
 
         animations[name].isPlayingAnim = true;
         currentAnimation = name;
+        texture = animations[name].texture;
     } else 
     {
         std::cout << "\nAnimation-> " << name << " <-Does Not Exist" << std::endl;

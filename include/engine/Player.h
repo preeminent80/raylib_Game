@@ -1,17 +1,19 @@
 #pragma once
 #include "Game.h"
 #include "Entity.h"
+#include <vector>
 
 
 class Player : public Entity
 {
 public:
+    Rectangle cameraBounds = { 0, 0, 1267, 1980}; 
     Camera2D camera;
     Vector2 velocity = {0,0};
     int speed = 3;
     std::string dir = "down";
 
-
+    
 
     void init(const char* texturePath, Vector2 pos, Vector2 size,float Scale) override
     {
@@ -37,7 +39,6 @@ public:
 
     void update() override
     {
-       
         Entity::update();
         position.x += velocity.x * speed;
         position.y += velocity.y * speed;
@@ -77,8 +78,6 @@ public:
             RunAnim("Walk_D", true);
             dir = "right";
         }
-       
-
 
         if(IsKeyReleased(KEY_W) || IsKeyReleased(KEY_S))
         {
@@ -113,8 +112,22 @@ public:
     {
         Entity::render();
         
-        //Camera
-        camera.target = position;
+        this->camera.target = this->position;
+
+    }
+
+    void PlayerCollision(std::vector<std::vector<Entity*>> map)
+    {
+        for(std::vector<Entity*> ROW : map)
+        {
+            for(Entity* object : ROW)
+            {   
+                if(CheckCollisionRecs(object->dest, this->dest))
+                {
+                    //Add collison logic here
+                }
+            }
+        }
     }
 
 };
